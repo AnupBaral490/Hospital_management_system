@@ -1,0 +1,49 @@
+{% extends 'navigationbar.html' %}
+{% load static %}
+{% block body %}
+
+
+<style>
+#example td:nth-child(1),
+#example th:nth-child(1),
+#example td:nth-child(2),
+#example th:nth-child(2),
+#example td:nth-child(3),
+#example th:nth-child(3) {
+    text-align: left !important;
+}
+</style>
+
+<div class="container" style="width: 100%; margin-top: 10px;"> 
+    <h2 class="text-center">View Patient</h2>
+    <br><br>
+    <table id="example" class="table table-hover" style="width:100%">
+     <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>Patient Name</th>
+            <th>Patient Gender</th>
+            <th>Contact</th>
+            <th>Address</th>  
+            <th>Delete</th>  
+        </tr>
+     </thead>
+
+     <tbody>
+        {% for i in pat %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.gender}}</td>
+            <td>{{i.mobile}}</td>
+            <td>{{i.address}}</td>
+            <td><a href="{% url 'delete_patient' i.id %}" onclick="return confirm('Are You Sure you want to delete')" class="btn btn-danger">Delete</a></td>
+        </tr>
+        {% endfor %}
+
+     </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
