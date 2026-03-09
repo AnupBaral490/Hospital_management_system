@@ -19,6 +19,7 @@ from django.urls import path
 from hospital.views import*
 
 urlpatterns = [
+    path('admin/dashboard/', Index, name='admin_home'),
     path('admin/', admin.site.urls),
 
     path('', User_Root, name='home'),
@@ -31,7 +32,6 @@ urlpatterns = [
 
     path('about/', About,name='about'),
     path('contact/', Contact,name='contact'),
-    path('admin/dashboard/', Index, name='admin_home'),
     path('dashboard/', Index, name='admin_dashboard_legacy'),
     path('admin_login/', Login,name='login'),
     path('logout/', Logout_admin,name='logout'),

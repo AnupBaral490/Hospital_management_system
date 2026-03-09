@@ -66,5 +66,162 @@
     </div>
 </section>
 
+<div class="row g-3 mt-1">
+    <div class="col-lg-7">
+        <section class="panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h5 mb-0">How It Works</h3>
+                <a href="{% url 'find_doctor' %}" class="btn btn-soft btn-sm">Start Now</a>
+            </div>
+
+            <div class="user-flow">
+                <article class="flow-step">
+                    <div class="flow-index">1</div>
+                    <div>
+                        <h4 class="flow-title">Search by Symptom or Disease</h4>
+                        <p class="flow-text mb-0">Use disease tags or type your condition to discover relevant specialists instantly.</p>
+                    </div>
+                </article>
+                <article class="flow-step">
+                    <div class="flow-index">2</div>
+                    <div>
+                        <h4 class="flow-title">Choose a Doctor</h4>
+                        <p class="flow-text mb-0">Review specialization, department, and experience details before booking.</p>
+                    </div>
+                </article>
+                <article class="flow-step">
+                    <div class="flow-index">3</div>
+                    <div>
+                        <h4 class="flow-title">Book and Track</h4>
+                        <p class="flow-text mb-0">Submit your appointment request and monitor current status from the tracking page.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-5">
+        <section class="panel h-100">
+            <h3 class="h5 mb-3">Why Patients Prefer This Portal</h3>
+            <div class="mini-feature-list">
+                <div class="mini-feature-item">
+                    <span class="mini-feature-icon"><i class="fa-solid fa-shield-heart"></i></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Conflict-Safe Scheduling</p>
+                        <p class="mb-0 small text-muted">Avoid double-booked slots with built-in appointment validation.</p>
+                    </div>
+                </div>
+                <div class="mini-feature-item">
+                    <span class="mini-feature-icon"><i class="fa-solid fa-user-check"></i></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Verified Doctor Profiles</p>
+                        <p class="mb-0 small text-muted">See clear details such as specialization, department, and experience.</p>
+                    </div>
+                </div>
+                <div class="mini-feature-item">
+                    <span class="mini-feature-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Quick Status Tracking</p>
+                        <p class="mb-0 small text-muted">Check appointment progress any time with mobile number and date.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="panel mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="h5 mb-0">Frequently Asked Questions</h3>
+    </div>
+
+    <div class="accordion" id="userFaqAccordion">
+        <div class="accordion-item faq-item">
+            <h2 class="accordion-header" id="faqOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqOneCollapse" aria-expanded="false" aria-controls="faqOneCollapse">
+                    How do I find the right doctor for my condition?
+                </button>
+            </h2>
+            <div id="faqOneCollapse" class="accordion-collapse collapse" aria-labelledby="faqOne" data-bs-parent="#userFaqAccordion">
+                <div class="accordion-body">Use the disease tags or enter your symptoms in the search field on the Find Doctor page.</div>
+            </div>
+        </div>
+        <div class="accordion-item faq-item">
+            <h2 class="accordion-header" id="faqTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwoCollapse" aria-expanded="false" aria-controls="faqTwoCollapse">
+                    Can I track my appointment after booking?
+                </button>
+            </h2>
+            <div id="faqTwoCollapse" class="accordion-collapse collapse" aria-labelledby="faqTwo" data-bs-parent="#userFaqAccordion">
+                <div class="accordion-body">Yes, open Track Appointment and enter your mobile number and appointment date.</div>
+            </div>
+        </div>
+        <div class="accordion-item faq-item">
+            <h2 class="accordion-header" id="faqThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThreeCollapse" aria-expanded="false" aria-controls="faqThreeCollapse">
+                    What if my preferred slot is already taken?
+                </button>
+            </h2>
+            <div id="faqThreeCollapse" class="accordion-collapse collapse" aria-labelledby="faqThree" data-bs-parent="#userFaqAccordion">
+                <div class="accordion-body">The system blocks conflicting slots and asks you to select another time immediately.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="panel mt-3 emergency-strip">
+    <div class="row g-3 align-items-center">
+        <div class="col-lg-8">
+            <h3 class="h5 mb-1"><i class="fa-solid fa-truck-medical me-2"></i>Nearby Services and Emergency Help</h3>
+            <p class="mb-0 text-muted">For urgent symptoms, contact emergency support first and then book specialist follow-up care through the portal.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                <a href="tel:102" class="btn btn-danger btn-sm"><i class="fa-solid fa-phone-volume me-1"></i>Emergency 102</a>
+                <a href="{% url 'contact' %}" class="btn btn-soft btn-sm">Contact Desk</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="panel mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="h5 mb-0">Patient Testimonials</h3>
+        <span class="small text-muted">What users say about booking experience</span>
+    </div>
+
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <article class="testimonial-card">
+                    <p class="testimonial-text">"I found a cardiology specialist in less than two minutes and got an appointment without any confusion."</p>
+                    <p class="testimonial-author mb-0">Ritika Sharma</p>
+                </article>
+            </div>
+            <div class="carousel-item">
+                <article class="testimonial-card">
+                    <p class="testimonial-text">"The disease-based search helped my family quickly pick the right doctor for my child."</p>
+                    <p class="testimonial-author mb-0">Niraj Karki</p>
+                </article>
+            </div>
+            <div class="carousel-item">
+                <article class="testimonial-card">
+                    <p class="testimonial-text">"Tracking appointment status is very useful. The dashboard is clear and easy to use on mobile."</p>
+                    <p class="testimonial-author mb-0">Sana Khan</p>
+                </article>
+            </div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
 {% endblock %}
 
