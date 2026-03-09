@@ -34,4 +34,78 @@
         </div>
     </div>
 </div>
+
+<section class="panel mt-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+        <h3 class="h5 mb-0">Quick Actions</h3>
+        <p class="text-muted mb-0 small">Use these shortcuts for daily front-desk operations.</p>
+    </div>
+
+    <div class="quick-actions-grid">
+        <a href="{% url 'add_doctor' %}" class="quick-action-card">
+            <span class="quick-icon"><i class="fa-solid fa-user-doctor"></i></span>
+            <span class="quick-title">Add Doctor</span>
+            <span class="quick-sub">Register new specialist profile</span>
+        </a>
+        <a href="{% url 'add_patient' %}" class="quick-action-card">
+            <span class="quick-icon"><i class="fa-solid fa-user-plus"></i></span>
+            <span class="quick-title">Add Patient</span>
+            <span class="quick-sub">Create patient medical record</span>
+        </a>
+        <a href="{% url 'add_appointment' %}" class="quick-action-card">
+            <span class="quick-icon"><i class="fa-solid fa-calendar-plus"></i></span>
+            <span class="quick-title">Book Appointment</span>
+            <span class="quick-sub">Schedule with conflict protection</span>
+        </a>
+        <a href="{% url 'view_appointment' %}" class="quick-action-card">
+            <span class="quick-icon"><i class="fa-solid fa-list-check"></i></span>
+            <span class="quick-title">Manage Schedule</span>
+            <span class="quick-sub">Filter by doctor, date, and status</span>
+        </a>
+    </div>
+</section>
+
+<div class="row g-3 mt-1">
+    <div class="col-lg-7">
+        <section class="panel h-100">
+            <h3 class="h5 mb-3">Operations Checklist</h3>
+            <div class="ops-list">
+                <div class="ops-item">
+                    <span class="ops-dot"></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Verify doctor schedule updates</p>
+                        <p class="mb-0 text-muted small">Confirm department, specialization, and available slots before appointment booking.</p>
+                    </div>
+                </div>
+                <div class="ops-item">
+                    <span class="ops-dot"></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Review patient emergency details</p>
+                        <p class="mb-0 text-muted small">Ensure blood group and emergency contact are filled for newly registered patients.</p>
+                    </div>
+                </div>
+                <div class="ops-item">
+                    <span class="ops-dot"></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Update appointment status regularly</p>
+                        <p class="mb-0 text-muted small">Track scheduled, completed, cancelled, and no-show visits throughout the day.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-5">
+        <section class="panel h-100">
+            <h3 class="h5 mb-3">Status Guide</h3>
+            <div class="d-flex flex-column gap-2">
+                <div><span class="status-pill status-scheduled">Scheduled</span> <span class="small text-muted ms-2">Upcoming confirmed consultation</span></div>
+                <div><span class="status-pill status-completed">Completed</span> <span class="small text-muted ms-2">Consultation is done</span></div>
+                <div><span class="status-pill status-cancelled">Cancelled</span> <span class="small text-muted ms-2">Cancelled by staff or patient</span></div>
+                <div><span class="status-pill status-no-show">No Show</span> <span class="small text-muted ms-2">Patient missed scheduled slot</span></div>
+            </div>
+            <hr>
+            <p class="mb-1 small text-muted">Tip: Use the appointment filter panel to quickly isolate a doctor's day schedule.</p>
+        </section>
+    </div>
+</div>
 {% endblock %}
