@@ -1,0 +1,57 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Find Doctors By Disease or Symptom</h2>
+    <p class="mb-0">Enter what you are experiencing and we will suggest doctors based on specialization.</p>
+</section>
+
+<section class="panel mb-3">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label">Disease / Symptom</label>
+            <input type="text" name="disease" value="{{ disease }}" class="form-control" placeholder="e.g. Fever, Skin, Heart pain">
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Doctor Name / Specialization</label>
+            <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Optional refine search">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-brand w-100">Search</button>
+            <a href="{% url 'find_doctor' %}" class="btn btn-soft w-100">Reset</a>
+        </div>
+    </form>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        {% for tag in disease_tags %}
+            <a href="{% url 'find_doctor' %}?disease={{ tag }}" class="disease-tag">{{ tag }}</a>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="row g-3">
+    {% for doctor in doctors %}
+    <div class="col-md-6 col-xl-4">
+        <article class="doctor-card h-100">
+            <div class="doctor-avatar"><i class="fa-solid fa-user-doctor"></i></div>
+            <h4 class="doctor-name">Dr. {{ doctor.name }}</h4>
+            <p class="doctor-meta mb-1"><strong>Specialization:</strong> {{ doctor.special }}</p>
+            <p class="doctor-meta mb-1"><strong>Department:</strong> {{ doctor.department|default:'General' }}</p>
+            <p class="doctor-meta mb-1"><strong>Qualification:</strong> {{ doctor.qualification|default:'N/A' }}</p>
+            <p class="doctor-meta mb-3"><strong>Availability:</strong> {{ doctor.availability_schedule|default:'Contact desk for schedule' }}</p>
+            <a href="{% url 'book_appointment_user' doctor.id %}" class="btn btn-brand w-100">Book Appointment</a>
+        </article>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="panel text-center py-4">
+            <h4 class="h6">No matching doctors found</h4>
+            <p class="text-muted mb-0">Try a broader symptom keyword like Fever, Skin, Heart, Child, or Bone.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,64 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Track Your Appointment</h2>
+    <p class="mb-0">Enter your mobile number and appointment date to check the latest booking status.</p>
+</section>
+
+<section class="panel mb-3">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label">Mobile Number</label>
+            <input type="text" name="mobile" class="form-control" value="{{ mobile }}" placeholder="Enter the same number used for booking" required>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Appointment Date</label>
+            <input type="date" name="date1" class="form-control" value="{{ date1 }}" required>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-brand w-100">Track</button>
+            <a href="{% url 'my_appointment_status' %}" class="btn btn-soft w-100">Reset</a>
+        </div>
+    </form>
+</section>
+
+{% if message %}
+<div class="alert alert-info">{{ message }}</div>
+{% endif %}
+
+{% if appointments %}
+<section class="panel table-responsive">
+    <h3 class="h5 mb-3">Appointment Result</h3>
+    <table class="table table-hover align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Specialization</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td>Dr. {{ appointment.doctor.name }}</td>
+                <td>{{ appointment.doctor.special }}</td>
+                <td>{{ appointment.patient.name }}</td>
+                <td>{{ appointment.date1 }}</td>
+                <td>{{ appointment.time1 }}</td>
+                <td><span class="status-pill status-{{ appointment.status|slugify }}">{{ appointment.get_status_display }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% elif searched and not message %}
+<div class="alert alert-warning">No matching appointments found.</div>
+{% endif %}
+
+{% endblock %}
+

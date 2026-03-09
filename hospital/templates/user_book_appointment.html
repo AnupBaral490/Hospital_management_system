@@ -1,0 +1,96 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Book Appointment</h2>
+    <p class="mb-0">You are booking with <strong>Dr. {{ doctor.name }}</strong> ({{ doctor.special }}).</p>
+</section>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <aside class="panel h-100">
+            <h3 class="h5 mb-3">Doctor Details</h3>
+            <p class="mb-1"><strong>Name:</strong> Dr. {{ doctor.name }}</p>
+            <p class="mb-1"><strong>Specialization:</strong> {{ doctor.special }}</p>
+            <p class="mb-1"><strong>Department:</strong> {{ doctor.department|default:'General' }}</p>
+            <p class="mb-1"><strong>Qualification:</strong> {{ doctor.qualification|default:'N/A' }}</p>
+            <p class="mb-0"><strong>Experience:</strong> {{ doctor.experience_years }} years</p>
+        </aside>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="form-card">
+            {% if success %}
+                <div class="alert alert-success">{{ success }}</div>
+            {% endif %}
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Patient Name *</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Gender *</label>
+                        <select name="gender" class="form-select" required>
+                            <option value="">Select</option>
+                            {% for gender in genders %}
+                                <option value="{{ gender }}">{{ gender }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Mobile</label>
+                        <input type="text" name="mobile" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" name="dob" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Blood Group</label>
+                        <select name="blood_group" class="form-select">
+                            <option value="">Select</option>
+                            {% for value, label in blood_groups %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Emergency Contact</label>
+                        <input type="text" name="emergency_contact" class="form-control">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Address *</label>
+                        <textarea name="address" rows="2" class="form-control" required></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Appointment Date *</label>
+                        <input type="date" name="date1" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Appointment Time *</label>
+                        <input type="time" name="time1" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Allergies</label>
+                        <textarea name="allergies" rows="2" class="form-control"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Medical Notes</label>
+                        <textarea name="medical_notes" rows="2" class="form-control" placeholder="Brief symptoms or history"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-brand mt-4 w-100">Confirm Appointment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

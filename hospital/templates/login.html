@@ -1,11 +1,11 @@
-{% extends 'navigationbar.html' %}
+{% extends 'user_base.html' %}
 {% load static %}
 {% block body %}
 
 {% if error == "yes" %}
 <script>
     alert('Logged In Successfully');
-    window.location = "{% url 'home' %}";
+    window.location = "{% url 'admin_home' %}";
 </script>
 {% endif %}
 
@@ -51,3 +51,4 @@
 </div>
 
 {% endblock %}
+

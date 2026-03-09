@@ -30,6 +30,28 @@ body {
     box-shadow: 0 12px 24px rgba(16, 32, 50, 0.2);
 }
 
+.top-nav-admin {
+    background: linear-gradient(90deg, #102235, #214866);
+}
+
+.top-nav-user {
+    background: linear-gradient(90deg, #0f4d64, #1e768a);
+}
+
+body.admin-app {
+    background:
+        radial-gradient(circle at 14% 6%, rgba(32, 92, 139, 0.15), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(15, 118, 110, 0.1), transparent 40%),
+        linear-gradient(180deg, #f2f7ff, #e7eef9);
+}
+
+body.user-app {
+    background:
+        radial-gradient(circle at 8% 3%, rgba(15, 140, 207, 0.14), transparent 45%),
+        radial-gradient(circle at 90% 94%, rgba(39, 158, 125, 0.11), transparent 40%),
+        linear-gradient(180deg, #f3fbff, #e7f5fb);
+}
+
 .navbar-brand {
     font-weight: 700;
     letter-spacing: 0.2px;
@@ -328,6 +350,56 @@ body {
     box-shadow: 0 0 0 5px rgba(15, 140, 207, 0.1);
 }
 
+.disease-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid #cfe2f2;
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: #225173;
+    background: #f4fbff;
+    transition: all 0.2s ease;
+}
+
+.disease-tag:hover {
+    background: #def1fb;
+    color: #123f5f;
+}
+
+.doctor-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(160deg, #ffffff, #f8fcff);
+    box-shadow: 0 12px 22px rgba(15, 45, 70, 0.08);
+    padding: 1rem;
+}
+
+.doctor-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #e8f4fc;
+    color: #0f6d9d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.6rem;
+}
+
+.doctor-name {
+    font-size: 1.04rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.doctor-meta {
+    font-size: 0.88rem;
+    color: #435f75;
+}
+
 .feature-card {
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -446,6 +518,10 @@ body {
     .btn-brand,
     .btn-soft {
         font-size: 0.92rem;
+    }
+
+    .doctor-card {
+        padding: 0.85rem;
     }
 }
 

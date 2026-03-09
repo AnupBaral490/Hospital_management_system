@@ -20,9 +20,19 @@ from hospital.views import*
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('', User_Root, name='home'),
+    path('user/login/', User_Login, name='user_login'),
+    path('user/register/', User_Register, name='user_register'),
+    path('user/dashboard/', User_Home, name='user_home'),
+    path('find-doctor/', User_Find_Doctor, name='find_doctor'),
+    path('book-appointment/<int:doctor_id>/', User_Book_Appointment, name='book_appointment_user'),
+    path('my-appointment-status/', User_Appointment_Status, name='my_appointment_status'),
+
     path('about/', About,name='about'),
     path('contact/', Contact,name='contact'),
-    path('',Index,name='home'),
+    path('admin/dashboard/', Index, name='admin_home'),
+    path('dashboard/', Index, name='admin_dashboard_legacy'),
     path('admin_login/', Login,name='login'),
     path('logout/', Logout_admin,name='logout'),
 

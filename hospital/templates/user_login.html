@@ -1,0 +1,31 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">User Login</h2>
+    <p class="mb-0">Login to access your dashboard, find doctors, and track appointments.</p>
+</section>
+
+<div class="form-shell" style="max-width: 560px;">
+    <div class="form-card">
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" required>
+
+            <label class="form-label mt-3">Password</label>
+            <input type="password" name="password" class="form-control" required>
+
+            <button type="submit" class="btn btn-brand w-100 mt-4">Login</button>
+        </form>
+
+        <p class="small text-muted mt-3 mb-0 text-center">New user? <a href="{% url 'user_register' %}">Create an account</a></p>
+    </div>
+</div>
+
+{% endblock %}

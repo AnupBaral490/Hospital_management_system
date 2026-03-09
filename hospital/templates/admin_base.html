@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Hospital Management System</title>
+    <title>Hospital Management | Admin</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,26 +12,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/mystyle.css' %}">
 </head>
-
-<body>
-    <nav class="navbar navbar-expand-lg top-nav navbar-dark">
+<body class="admin-app">
+    <nav class="navbar navbar-expand-lg top-nav top-nav-admin navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% if request.user.is_staff %}{% url 'admin_home' %}{% else %}{% url 'user_home' %}{% endif %}"><i class="fa-solid fa-hospital me-2"></i>Hospital Management</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myMenu" aria-controls="myMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{% url 'admin_home' %}"><i class="fa-solid fa-hospital me-2"></i>Admin Console</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-controls="adminMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="myMenu">
+            <div class="collapse navbar-collapse" id="adminMenu">
                 <ul class="navbar-nav ms-auto text-center">
-                    {% if not request.user.is_staff %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'user_home' %}">User Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'find_doctor' %}">Find Doctor</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'my_appointment_status' %}">Track Appointment</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Admin Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                    {% endif %}
-                    {% if request.user.is_staff %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'admin_home' %}">Dashboard</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Doctors</a>
@@ -55,7 +45,6 @@
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
-                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -69,7 +58,7 @@
                 {% endfor %}
             {% endif %}
             {% block body %}{% endblock %}
-            <p class="footer-note">Hospital Management System</p>
+            <p class="footer-note">Admin Portal</p>
         </div>
     </main>
 
