@@ -2,7 +2,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import *
 from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from .forms import DoctorForm, PatientForm, AppointmentForm
 # Create your views here.
+
+
+def staff_required(view_func):
+    return user_passes_test(
+        lambda user: user.is_authenticated and user.is_staff,
+        login_url="login",
+    )(view_func)
+
+
 def About(request):
     return render(request, 'about.html')
 
@@ -10,24 +23,15 @@ def About(request):
 def Contact(request):
     return render(request, 'contact.html')
 
-def Index(request):
-    if not request.user.is_staff:
-        return redirect('login')
-    doctors = Doctor.objects.all()
-    patient = Patient.objects.all()
-    appointment = Appointment.objects.all()
 
-    d = 0;
-    p = 0;
-    a = 0;
-    for i in doctors:
-        d+=1
-    for i in patient:
-        p+=1
-    for i in appointment:
-        a+=1
-    d1 = {'d':d,'p':p,'a':a}
-    return render(request, 'index.html',d1)
+@staff_required
+def Index(request):
+    d1 = {
+        'd': Doctor.objects.count(),
+        'p': Patient.objects.count(),
+        'a': Appointment.objects.count(),
+    }
+    return render(request, 'index.html', d1)
 
 def Login(request):
     error=""
@@ -47,133 +51,185 @@ def Login(request):
     return render(request, 'login.html',d)
 
 def Logout_admin(request):
-    if not request.user.is_staff:
-        return redirect('login')
     logout(request)
     return redirect('login')
 
 
+@staff_required
 def View_Doctor(request):
-    if not request.user.is_staff:
-        return redirect('login')
-    doc = Doctor.objects.all()
-    d = {'doc':doc}
-    return render(request,'view_doctor.html',d)
+    query = request.GET.get("q", "").strip()
+    specialization = request.GET.get("specialization", "").strip()
+
+    doc = Doctor.objects.all().order_by("name")
+    if query:
+        doc = doc.filter(
+            Q(name__icontains=query)
+            | Q(mobile__icontains=query)
+            | Q(department__icontains=query)
+            | Q(qualification__icontains=query)
+        )
+    if specialization:
+        doc = doc.filter(special__icontains=specialization)
+
+    d = {
+        'doc': doc,
+        'q': query,
+        'specialization': specialization,
+    }
+    return render(request, 'view_doctor.html', d)
 
 
+@staff_required
 def Add_Doctor(request):
-    error = ""
-    if not request.user.is_staff:
-        return redirect('login')
     if request.method == 'POST':
-        n = request.POST['name']
-        c = request.POST['contact']
-        sp = request.POST['special']
-        try:
-            Doctor.objects.create(name=n, mobile=c, special=sp)
-            error = "yes"   # success should be yes
-        except:
-            error = "not"   # failure should be not
-    d = {'error': error}
-    return render(request, 'add_doctor.html', d)
+        form = DoctorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('view_doctor')
+    else:
+        form = DoctorForm()
+    return render(request, 'add_doctor.html', {'form': form})
 
 
+@staff_required
+def Edit_Doctor(request, pid):
+    doctor = get_object_or_404(Doctor, id=pid)
+    if request.method == 'POST':
+        form = DoctorForm(request.POST, instance=doctor)
+        if form.is_valid():
+            form.save()
+            return redirect('view_doctor')
+    else:
+        form = DoctorForm(instance=doctor)
+    return render(request, 'edit_doctor.html', {'form': form, 'doctor': doctor})
+
+
+@staff_required
 def Delete_Doctor(request,pid):
-    if not request.user.is_staff:
-        return redirect('login')
-    doctor = Doctor.objects.get(id=pid)
-    doctor.delete()
+    doctor = get_object_or_404(Doctor, id=pid)
+    if request.method == 'POST':
+        doctor.delete()
     return redirect('view_doctor')
 
 
 
+@staff_required
 def View_Patient(request):
-    if not request.user.is_staff:
-        return redirect('login')
-    pat = Patient.objects.all()
-    d = {'pat':pat}
-    return render(request,'view_patient.html',d)
+    query = request.GET.get("q", "").strip()
+    mobile = request.GET.get("mobile", "").strip()
+
+    pat = Patient.objects.all().order_by("name")
+    if query:
+        pat = pat.filter(name__icontains=query)
+    if mobile:
+        pat = pat.filter(mobile__icontains=mobile)
+
+    d = {
+        'pat': pat,
+        'q': query,
+        'mobile': mobile,
+    }
+    return render(request, 'view_patient.html', d)
 
 
+@staff_required
 def Add_Patient(request):
-    error = ""
-    if not request.user.is_staff:
-        return redirect('login')
-
     if request.method == 'POST':
-        n = request.POST['name']
-        g = request.POST['gender']
-        m = request.POST['mobile']
-        a = request.POST['address']
+        form = PatientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('view_patient')
+    else:
+        form = PatientForm()
 
-        try:
-            Patient.objects.create(name=n, gender=g, mobile=m, address=a)
-            error = "yes"
-        except:
-            error = "not"
-
-    d = {'error': error}
-    return render(request, 'add_patient.html', d)
+    return render(request, 'add_patient.html', {'form': form})
 
 
+@staff_required
+def Edit_Patient(request, pid):
+    patient = get_object_or_404(Patient, id=pid)
+    if request.method == 'POST':
+        form = PatientForm(request.POST, instance=patient)
+        if form.is_valid():
+            form.save()
+            return redirect('view_patient')
+    else:
+        form = PatientForm(instance=patient)
+    return render(request, 'edit_patient.html', {'form': form, 'patient': patient})
+
+
+@staff_required
 def Delete_Patient(request,pid):
-    if not request.user.is_staff:
-        return redirect('login')
-    patient = Patient.objects.get(id=pid)
-    patient.delete()
+    patient = get_object_or_404(Patient, id=pid)
+    if request.method == 'POST':
+        patient.delete()
     return redirect('view_patient')
 
 
 
+@staff_required
 def View_Appointment(request):
-    if not request.user.is_staff:
-        return redirect('login')
-    appoint = Appointment.objects.all()
-    d = {'appoint':appoint}
-    return render(request,'view_appointment.html',d)
+    date1 = request.GET.get("date", "").strip()
+    doctor_id = request.GET.get("doctor", "").strip()
+    status = request.GET.get("status", "").strip()
+
+    appoint = Appointment.objects.select_related("doctor", "patient").order_by("-date1", "time1")
+    if date1:
+        appoint = appoint.filter(date1=date1)
+    if doctor_id:
+        appoint = appoint.filter(doctor_id=doctor_id)
+    if status:
+        appoint = appoint.filter(status=status)
+
+    d = {
+        'appoint': appoint,
+        'doctors': Doctor.objects.all().order_by("name"),
+        'statuses': AppointmentStatus.choices,
+        'selected_date': date1,
+        'selected_doctor': doctor_id,
+        'selected_status': status,
+    }
+    return render(request, 'view_appointment.html', d)
 
 
+@staff_required
 def Add_Appointment(request):
-    error = ""
-    if not request.user.is_staff:
-        return redirect('login')
-
-    doctor1 = Doctor.objects.all()
-    patient1 = Patient.objects.all()
-
     if request.method == 'POST':
-        d = request.POST['doctor']
-        p = request.POST['patient']
-        d1 = request.POST['date']
-        t = request.POST['time']
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('view_appointment')
+    else:
+        form = AppointmentForm()
 
-        doctor = Doctor.objects.filter(name=d).first()
-        patient = Patient.objects.filter(name=p).first()
-
-        try:
-            Appointment.objects.create(
-                doctor=doctor,
-                patient=patient,
-                date1=d1,    # correct field
-                time1=t      # correct field
-            )
-            error = "yes"
-        except Exception as e:
-            print("ERROR:", e)
-            error = "not"
-
-    data = {'doctor': doctor1, 'patient': patient1, 'error': error}
-    return render(request, 'add_appointment.html', data)
+    return render(request, 'add_appointment.html', {'form': form})
 
 
+@staff_required
+def Edit_Appointment(request, pid):
+    appointment = get_object_or_404(Appointment, id=pid)
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST, instance=appointment)
+        if form.is_valid():
+            form.save()
+            return redirect('view_appointment')
+    else:
+        form = AppointmentForm(instance=appointment)
+    return render(
+        request,
+        'edit_appointment.html',
+        {'form': form, 'appointment': appointment},
+    )
 
 
 
+
+
+@staff_required
 def Delete_Appointment(request,pid):
-    if not request.user.is_staff:
-        return redirect('login')
-    appointment = Appointment.objects.get(id=pid)
-    appointment.delete()
+    appointment = get_object_or_404(Appointment, id=pid)
+    if request.method == 'POST':
+        appointment.delete()
     return redirect('view_appointment')
 
 

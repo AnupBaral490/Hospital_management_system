@@ -2,46 +2,76 @@
 {% load static %}
 {% block body %}
 
-
-<style>
-#example td:nth-child(1),
-#example th:nth-child(1),
-#example td:nth-child(2),
-#example th:nth-child(2),
-#example td:nth-child(3),
-#example th:nth-child(3) {
-    text-align: left !important;
-}
-</style>
-
-<div class="container" style="width: 100%; margin-top: 10px;"> 
-    <h2 class="text-center">View Appointment</h2>
-    <br><br>
-    <table id="example" class="table table-hover" style="width:100%">
-     <thead>
-        <tr>
-            <th>Doctor Name</th>
-            <th>Patient Name</th>
-            <th>Date</th>
-            <th>Time</th>  
-            <th>Delete</th>  
-        </tr>
-     </thead>
-
-     <tbody>
-        {% for i in appoint %}
-        <tr>
-            <td>{{i.doctor}}</td>
-            <td>{{i.patient}}</td>
-            <td>{{i.date1}}</td>
-            <td>{{i.time1}}</td>
-            <td><a href="{% url 'delete_appointment' i.id %}" onclick="return confirm('Are You Sure you want to delete')" class="btn btn-danger">Delete</a></td>
-        </tr>
-        {% endfor %}
-
-     </tbody>
-    </table>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="section-title mb-0">Appointments</h2>
+    <a href="{% url 'add_appointment' %}" class="btn btn-brand">Add Appointment</a>
 </div>
 
+<div class="panel mb-3">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label">Date</label>
+            <input type="date" name="date" class="form-control" value="{{ selected_date }}">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Doctor</label>
+            <select name="doctor" class="form-select">
+                <option value="">All doctors</option>
+                {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}" {% if selected_doctor == doctor.id|stringformat:'s' %}selected{% endif %}>{{ doctor.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="">All status</option>
+                {% for value, label in statuses %}
+                    <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button class="btn btn-brand w-100" type="submit">Filter</button>
+            <a class="btn btn-soft w-100" href="{% url 'view_appointment' %}">Reset</a>
+        </div>
+    </form>
+</div>
 
+<div class="panel table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in appoint %}
+            <tr>
+                <td>{{ i.doctor }}</td>
+                <td>{{ i.patient }}</td>
+                <td>{{ i.date1 }}</td>
+                <td>{{ i.time1 }}</td>
+                <td>
+                    <span class="status-pill status-{{ i.status|slugify }}">{{ i.get_status_display }}</span>
+                </td>
+                <td class="actions-cell">
+                    <a href="{% url 'edit_appointment' i.id %}" class="btn btn-sm btn-soft">Edit</a>
+                    <form method="post" action="{% url 'delete_appointment' i.id %}" onsubmit="return confirm('Delete this appointment?');">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-4">No appointments found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

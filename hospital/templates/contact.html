@@ -2,41 +2,37 @@
 {% load static %}
 {% block body %}
 
-<style>
-.mydivstyle:hover{
-    box-shadow:0 0 20px 0 rgba(0,0,0,0.3);
-    transform:translate(-20px)
-}
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Contact Information</h2>
+    <p class="mb-0">Reach out for administration support, appointment desk operations, and platform maintenance details.</p>
+</section>
 
-</style>
-<div class="container" style= "margin-top:50px"> 
+<div class="contact-grid">
+    <article class="contact-card">
+        <h5><i class="fa-solid fa-phone-volume me-2"></i>Phone</h5>
+        <a href="tel:+9779846880980">+977 9846880980</a>
+    </article>
 
-    <h2 class="text-center">Contact US</h2>
-    <br><br>
+    <article class="contact-card">
+        <h5><i class="fa-solid fa-envelope me-2"></i>Email</h5>
+        <a href="mailto:baralanup832@gmail.com">baralanup832@gmail.com</a>
+    </article>
 
-<div class="row mt-5 text-center">
-    <div class="col-lg-3 col-sm-6 mydivstyle">
-    <h4><i class="fas fa-phone-square"></i> Contact</h4>
-    <p class="mt-3 font-weight-bold"><a class= "text-danger" href="tel:+977 9846880980">+977 9846880980</a></p>
-    </div>
+    <article class="contact-card">
+        <h5><i class="fa-solid fa-location-dot me-2"></i>Office Address</h5>
+        <a href="http://maps.google.com/maps?q=Pokhara22+Viewpoint" target="_blank" rel="noopener">Pokhara-22, ViewPoint</a>
+    </article>
 
-<div class="col-lg-3 col-sm-6 mydivstyle">
-    <h4><i class="fas fa-envelope"></i> Send Email</h4>
-    <p class="mt-3 font-weight-bold"><a class= "text-danger" href="mailto:baralanup832@gmail.com">baralanup832@gmail.com</a></p>
-    </div>
-
-
-<div class="col-lg-3 col-sm-6 mydivstyle">
-    <h4><i class="fas fa-address-card"></i> Office Address</h4>
-    <p class="mt-3 font-weight-bold"><a class= "text-danger" href="http://maps.google.com/maps?q=Pokhara22+Viewpoint">Pokhara-22, ViewPoint</a></p>
-    </div>
-
-<div class="col-lg-3 col-sm-6 mydivstyle">
-    <h4><i class="fas fa-address-card"></i> Office Hours</h4>
-    <p class="mt-3 font-weight-bold text-danger">9:00 AM to 7:00 PM</p>
-    </div>
-
+    <article class="contact-card">
+        <h5><i class="fa-solid fa-clock me-2"></i>Office Hours</h5>
+        <p class="mb-0 text-muted">09:00 AM to 07:00 PM</p>
+    </article>
 </div>
 
+<div class="panel mt-3">
+    <p class="mb-1"><strong>Support Window:</strong> Monday to Saturday</p>
+    <p class="mb-0 text-muted">For urgent record updates, please contact through phone first and follow with email documentation.</p>
 </div>
+
+<p class="footer-note">Response time: within one business day for non-urgent requests.</p>
 {% endblock %}

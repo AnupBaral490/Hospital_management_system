@@ -4,15 +4,15 @@
 
 <div class="form-shell">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="section-title mb-0">Add Patient</h2>
-        <a href="{% url 'view_patient' %}" class="btn btn-soft">Back to Patients</a>
+        <h2 class="section-title mb-0">Edit Doctor</h2>
+        <a href="{% url 'view_doctor' %}" class="btn btn-soft">Back to Doctors</a>
     </div>
     <div class="form-card">
         <form method="post" novalidate>
-        {% csrf_token %}
+            {% csrf_token %}
             <div class="row g-3">
                 {% for field in form %}
-                <div class="col-md-6 {% if field.name == 'allergies' or field.name == 'medical_notes' or field.name == 'address' %}col-12{% endif %}">
+                <div class="col-md-6 {% if field.name == 'availability_schedule' %}col-12{% endif %}">
                     <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
                     {% if field.errors %}
@@ -21,7 +21,7 @@
                 </div>
                 {% endfor %}
             </div>
-            <button type="submit" class="btn btn-brand mt-4">Save Patient</button>
+            <button type="submit" class="btn btn-brand mt-4">Update Doctor</button>
         </form>
     </div>
 </div>

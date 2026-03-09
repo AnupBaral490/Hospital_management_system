@@ -2,10 +2,32 @@ from django.db import models
 
 # Create your models here.
 
+
+class AppointmentStatus(models.TextChoices):
+    SCHEDULED = "scheduled", "Scheduled"
+    COMPLETED = "completed", "Completed"
+    CANCELLED = "cancelled", "Cancelled"
+    NO_SHOW = "no_show", "No Show"
+
+
+class BloodGroup(models.TextChoices):
+    A_POS = "A+", "A+"
+    A_NEG = "A-", "A-"
+    B_POS = "B+", "B+"
+    B_NEG = "B-", "B-"
+    AB_POS = "AB+", "AB+"
+    AB_NEG = "AB-", "AB-"
+    O_POS = "O+", "O+"
+    O_NEG = "O-", "O-"
+
 class Doctor(models.Model):
     name = models.CharField(max_length=50)
-    mobile = models.IntegerField()
+    mobile = models.CharField(max_length=20)
     special = models.CharField(max_length=50)
+    department = models.CharField(max_length=80, blank=True)
+    qualification = models.CharField(max_length=120, blank=True)
+    experience_years = models.PositiveIntegerField(default=0)
+    availability_schedule = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -13,8 +35,13 @@ class Doctor(models.Model):
 class Patient(models.Model):
     name = models.CharField(max_length=50)
     gender = models.CharField(max_length=10)
-    mobile = models.IntegerField(null=True)#not compulsary
+    mobile = models.CharField(max_length=20, blank=True)  # optional
     address = models.CharField(max_length=150)
+    dob = models.DateField(null=True, blank=True)
+    blood_group = models.CharField(max_length=5, choices=BloodGroup.choices, blank=True)
+    emergency_contact = models.CharField(max_length=20, blank=True)
+    allergies = models.TextField(blank=True)
+    medical_notes = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -25,6 +52,18 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date1 = models.DateField()
     time1 = models.TimeField()
+    status = models.CharField(
+        max_length=20,
+        choices=AppointmentStatus.choices,
+        default=AppointmentStatus.SCHEDULED,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["doctor", "date1", "time1"], name="unique_doctor_time_slot"
+            )
+        ]
 
 
     def __str__(self):

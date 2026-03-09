@@ -2,48 +2,64 @@
 {% load static %}
 {% block body %}
 
-
-<style>
-#example td:nth-child(1),
-#example th:nth-child(1),
-#example td:nth-child(2),
-#example th:nth-child(2),
-#example td:nth-child(3),
-#example th:nth-child(3) {
-    text-align: left !important;
-}
-</style>
-
-<div class="container" style="width: 100%; margin-top: 10px;"> 
-    <h2 class="text-center">View Patient</h2>
-    <br><br>
-    <table id="example" class="table table-hover" style="width:100%">
-     <thead>
-        <tr>
-            <th>Patient ID</th>
-            <th>Patient Name</th>
-            <th>Patient Gender</th>
-            <th>Contact</th>
-            <th>Address</th>  
-            <th>Delete</th>  
-        </tr>
-     </thead>
-
-     <tbody>
-        {% for i in pat %}
-        <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.gender}}</td>
-            <td>{{i.mobile}}</td>
-            <td>{{i.address}}</td>
-            <td><a href="{% url 'delete_patient' i.id %}" onclick="return confirm('Are You Sure you want to delete')" class="btn btn-danger">Delete</a></td>
-        </tr>
-        {% endfor %}
-
-     </tbody>
-    </table>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="section-title mb-0">Patients</h2>
+    <a href="{% url 'add_patient' %}" class="btn btn-brand">Add Patient</a>
 </div>
 
+<div class="panel mb-3">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label">Patient Name</label>
+            <input type="text" name="q" class="form-control" value="{{ q }}" placeholder="Search by name">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Mobile</label>
+            <input type="text" name="mobile" class="form-control" value="{{ mobile }}" placeholder="Search by mobile">
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-brand w-100" type="submit">Filter</button>
+            <a class="btn btn-soft w-100" href="{% url 'view_patient' %}">Reset</a>
+        </div>
+    </form>
+</div>
 
+<div class="panel table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Contact</th>
+                <th>DOB</th>
+                <th>Blood Group</th>
+                <th>Emergency</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in pat %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.gender }}</td>
+                <td>{{ i.mobile|default:'-' }}</td>
+                <td>{{ i.dob|default:'-' }}</td>
+                <td>{{ i.blood_group|default:'-' }}</td>
+                <td>{{ i.emergency_contact|default:'-' }}</td>
+                <td class="actions-cell">
+                    <a href="{% url 'edit_patient' i.id %}" class="btn btn-sm btn-soft">Edit</a>
+                    <form method="post" action="{% url 'delete_patient' i.id %}" onsubmit="return confirm('Delete this patient?');">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" class="text-center text-muted py-4">No patients found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
