@@ -59,21 +59,42 @@
             {% endif %}
             {% block body %}{% endblock %}
 
-            <section class="site-footer">
+            <section class="site-footer site-footer-premium">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <h6>Admin Console</h6>
+                        <div class="footer-brand">
+                            <span class="footer-brand-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                            <h6 class="mb-0">Admin Console</h6>
+                        </div>
                         <p>Centralized operations for doctor, patient, and appointment lifecycle management.</p>
+                        <div class="footer-chip-wrap">
+                            <span class="footer-chip"><i class="fa-solid fa-user-doctor"></i>Doctor Ops</span>
+                            <span class="footer-chip"><i class="fa-solid fa-user-group"></i>Patient Records</span>
+                            <span class="footer-chip"><i class="fa-solid fa-calendar-days"></i>Schedule Control</span>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <h6>Operations Shortcuts</h6>
-                        <p><a href="{% url 'add_doctor' %}">Add Doctor</a></p>
-                        <p><a href="{% url 'add_patient' %}">Add Patient</a></p>
-                        <p><a href="{% url 'add_appointment' %}">Add Appointment</a></p>
+                        <div class="footer-link-list">
+                            <p><a href="{% url 'add_doctor' %}"><i class="fa-solid fa-user-doctor me-1"></i>Add Doctor</a></p>
+                            <p><a href="{% url 'add_patient' %}"><i class="fa-solid fa-user-plus me-1"></i>Add Patient</a></p>
+                            <p><a href="{% url 'add_appointment' %}"><i class="fa-solid fa-calendar-plus me-1"></i>Add Appointment</a></p>
+                            <p><a href="{% url 'view_appointment' %}"><i class="fa-solid fa-list-check me-1"></i>View Appointments</a></p>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <h6>Governance Note</h6>
                         <p>Maintain accurate records and update appointment statuses throughout the day.</p>
+                        <p class="mt-2"><a href="{% url 'logout' %}">Sign out securely</a></p>
+                    </div>
+                </div>
+
+                <div class="footer-divider"></div>
+                <div class="footer-bottom">
+                    <p class="mb-0">Operational clarity and accountable care coordination.</p>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{% url 'view_appointment' %}" class="footer-badge"><i class="fa-solid fa-list-check me-1"></i>Today Schedule</a>
+                        <span class="footer-badge"><i class="fa-solid fa-shield me-1"></i>Admin Portal</span>
                     </div>
                 </div>
             </section>

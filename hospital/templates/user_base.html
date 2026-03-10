@@ -50,23 +50,43 @@
             {% endif %}
             {% block body %}{% endblock %}
 
-            <section class="site-footer">
+            <section class="site-footer site-footer-premium">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <h6>Patient Services</h6>
-                        <p>Helping you find specialists, book appointments, and track visits with confidence.</p>
+                        <div class="footer-brand">
+                            <span class="footer-brand-icon"><i class="fa-solid fa-heart-pulse"></i></span>
+                            <h6 class="mb-0">Patient Services</h6>
+                        </div>
+                        <p>Helping you find trusted specialists, book appointments, and follow your care journey with confidence.</p>
+                        <div class="footer-chip-wrap">
+                            <span class="footer-chip"><i class="fa-solid fa-shield-heart"></i>Secure</span>
+                            <span class="footer-chip"><i class="fa-solid fa-clock"></i>Quick Access</span>
+                            <span class="footer-chip"><i class="fa-solid fa-mobile-screen-button"></i>Mobile Friendly</span>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <h6>Quick Links</h6>
-                        <p><a href="{% url 'find_doctor' %}">Find Doctor</a></p>
-                        <p><a href="{% url 'my_appointment_status' %}">Track Appointment</a></p>
-                        <p><a href="{% url 'contact' %}">Contact Support</a></p>
+                        <div class="footer-link-list">
+                            <p><a href="{% url 'find_doctor' %}"><i class="fa-solid fa-stethoscope me-1"></i>Find Doctor</a></p>
+                            <p><a href="{% url 'my_appointment_status' %}"><i class="fa-solid fa-calendar-check me-1"></i>Track Appointment</a></p>
+                            <p><a href="{% url 'about' %}"><i class="fa-solid fa-circle-info me-1"></i>About Us</a></p>
+                            <p><a href="{% url 'contact' %}"><i class="fa-solid fa-headset me-1"></i>Contact Support</a></p>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <h6>Support Hours</h6>
                         <p>Monday to Saturday</p>
                         <p>09:00 AM to 07:00 PM</p>
                         <p><a href="tel:102">Emergency: 102</a></p>
+                    </div>
+                </div>
+
+                <div class="footer-divider"></div>
+                <div class="footer-bottom">
+                    <p class="mb-0">Care when you need it, clarity at every step.</p>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="tel:102" class="footer-badge"><i class="fa-solid fa-phone-volume me-1"></i>Emergency 102</a>
+                        <span class="footer-badge"><i class="fa-solid fa-hospital-user me-1"></i>Patient Help Desk</span>
                     </div>
                 </div>
             </section>
