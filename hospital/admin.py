@@ -21,3 +21,10 @@ class AppointmentAdmin(admin.ModelAdmin):
 	list_display = ("doctor", "patient", "date1", "time1", "status")
 	search_fields = ("doctor__name", "patient__name")
 	list_filter = ("status", "date1")
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+	list_display = ("name", "email", "phone", "subject", "created_at")
+	search_fields = ("name", "email", "phone", "subject", "message")
+	list_filter = ("created_at",)

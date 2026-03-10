@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from .forms import DoctorForm, PatientForm, AppointmentForm
+from .forms import DoctorForm, PatientForm, AppointmentForm, ContactMessageForm
 # Create your views here.
 
 
@@ -66,7 +67,16 @@ def About(request):
 
 
 def Contact(request):
-    return render(request, 'contact.html')
+    if request.method == "POST":
+        form = ContactMessageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thank you for contacting us. We will get back to you soon.")
+            return redirect("contact")
+    else:
+        form = ContactMessageForm()
+
+    return render(request, 'contact.html', {"form": form})
 
 
 def User_Root(request):

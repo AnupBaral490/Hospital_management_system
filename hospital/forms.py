@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Appointment, Doctor, Patient
+from .models import Appointment, ContactMessage, Doctor, Patient
 
 
 class BootstrapFormMixin:
@@ -90,3 +90,16 @@ class AppointmentForm(BootstrapFormMixin, forms.ModelForm):
                 )
 
         return cleaned_data
+
+
+class ContactMessageForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._apply_bootstrap_classes()
+
+    class Meta:
+        model = ContactMessage
+        fields = ["name", "email", "phone", "subject", "message"]
+        widgets = {
+            "message": forms.Textarea(attrs={"rows": 4}),
+        }
