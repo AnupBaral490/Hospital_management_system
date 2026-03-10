@@ -14,7 +14,7 @@
 </head>
 <body class="user-app">
     <nav class="navbar navbar-expand-lg top-nav top-nav-user navbar-dark">
-        <div class="container">
+        <div class="container-fluid px-3 px-md-4 px-xl-5">
             <a class="navbar-brand" href="{% url 'user_home' %}"><i class="fa-solid fa-hospital-user me-2"></i>Patient Services</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#userMenu" aria-controls="userMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -42,7 +42,7 @@
     </nav>
 
     <main class="page-shell">
-        <div class="container">
+        <div class="container-fluid px-3 px-md-4 px-xl-5">
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-{{ message.tags|default:'info' }} mt-2">{{ message }}</div>
