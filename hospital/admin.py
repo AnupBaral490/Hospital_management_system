@@ -28,3 +28,23 @@ class ContactMessageAdmin(admin.ModelAdmin):
 	list_display = ("name", "email", "phone", "subject", "created_at")
 	search_fields = ("name", "email", "phone", "subject", "message")
 	list_filter = ("created_at",)
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+	list_display = ("user", "full_name", "phone", "blood_group", "updated_at")
+	search_fields = ("user__username", "full_name", "phone")
+
+
+@admin.register(HealthDocument)
+class HealthDocumentAdmin(admin.ModelAdmin):
+	list_display = ("user", "title", "uploaded_at")
+	search_fields = ("user__username", "title", "notes")
+	list_filter = ("uploaded_at",)
+
+
+@admin.register(AppointmentFeedback)
+class AppointmentFeedbackAdmin(admin.ModelAdmin):
+	list_display = ("appointment", "user", "rating", "created_at")
+	search_fields = ("appointment__doctor__name", "appointment__patient__name", "comment")
+	list_filter = ("rating", "created_at")

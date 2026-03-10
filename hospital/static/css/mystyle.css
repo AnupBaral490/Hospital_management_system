@@ -798,6 +798,30 @@ body.user-app {
     color: #5a6f80;
 }
 
+.slot-panel {
+    border: 1px dashed #c6d8e4;
+    border-radius: 12px;
+    background: #f5fbfd;
+    padding: 0.8rem;
+}
+
+.doc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.doc-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    align-items: flex-start;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem;
+    background: #f8fcfd;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;

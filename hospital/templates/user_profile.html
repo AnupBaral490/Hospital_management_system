@@ -1,0 +1,53 @@
+{% extends 'user_base.html' %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">My Profile</h2>
+    <p class="mb-0">Save your details once to auto-fill appointment booking forms.</p>
+</section>
+
+<section class="form-shell" style="max-width: 860px;">
+    <div class="form-card">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="id_full_name">Full Name</label>
+                    {{ form.full_name }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="id_gender">Gender</label>
+                    {{ form.gender }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="id_phone">Phone</label>
+                    {{ form.phone }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="id_dob">Date of Birth</label>
+                    {{ form.dob }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="id_blood_group">Blood Group</label>
+                    {{ form.blood_group }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="id_emergency_contact">Emergency Contact</label>
+                    {{ form.emergency_contact }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="id_address">Address</label>
+                    {{ form.address }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="id_allergies">Allergies</label>
+                    {{ form.allergies }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-brand mt-4">Save Profile</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'user_base.html' %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Reschedule Appointment</h2>
+    <p class="mb-0">Doctor: <strong>Dr. {{ appointment.doctor.name }}</strong> | Current slot: {{ appointment.date1 }} at {{ appointment.time1 }}</p>
+</section>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <aside class="panel h-100">
+            <h3 class="h5 mb-3">Appointment Details</h3>
+            <p class="mb-1"><strong>Patient:</strong> {{ appointment.patient.name }}</p>
+            <p class="mb-1"><strong>Doctor:</strong> Dr. {{ appointment.doctor.name }}</p>
+            <p class="mb-1"><strong>Specialization:</strong> {{ appointment.doctor.special }}</p>
+            <p class="mb-0"><strong>Status:</strong> {{ appointment.get_status_display }}</p>
+        </aside>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="form-card">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_date1">New Date</label>
+                        {{ form.date1 }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_time1">New Time</label>
+                        {{ form.time1 }}
+                        {% if form.time1.errors %}
+                            <div class="text-danger small mt-1">{{ form.time1.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
+                        <div class="slot-panel">
+                            <p class="mb-2 fw-semibold">Available Slots</p>
+                            <div class="d-flex flex-wrap gap-2" id="slotButtons">
+                                {% for slot in available_slots %}
+                                    <button type="button" class="btn btn-soft btn-sm slot-pick" data-slot="{{ slot }}">{{ slot }}</button>
+                                {% empty %}
+                                    <p class="text-muted small mb-0">No slots available for selected date.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-brand">Save New Slot</button>
+                    <a href="{% url 'user_my_appointments' %}" class="btn btn-soft">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const dateInput = document.getElementById("id_date1");
+    const timeInput = document.getElementById("id_time1");
+    const slotButtons = document.getElementById("slotButtons");
+
+    function bindSlotButtons() {
+        document.querySelectorAll(".slot-pick").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                timeInput.value = btn.dataset.slot;
+            });
+        });
+    }
+
+    function loadSlots() {
+        const dateValue = dateInput.value;
+        if (!dateValue) {
+            return;
+        }
+
+        fetch("{% url 'available_slots' appointment.doctor.id %}?date=" + dateValue + "&exclude_appointment={{ appointment.id }}")
+            .then((response) => response.json())
+            .then((data) => {
+                if (!data.slots || data.slots.length === 0) {
+                    slotButtons.innerHTML = '<p class="text-muted small mb-0">No slots available for selected date.</p>';
+                    return;
+                }
+
+                slotButtons.innerHTML = data.slots
+                    .map((slot) => `<button type="button" class="btn btn-soft btn-sm slot-pick" data-slot="${slot}">${slot}</button>`)
+                    .join("");
+                bindSlotButtons();
+            });
+    }
+
+    bindSlotButtons();
+    dateInput.addEventListener("change", loadSlots);
+</script>
+
+{% endblock %}

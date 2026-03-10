@@ -33,57 +33,71 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label">Patient Name *</label>
-                        <input type="text" name="name" class="form-control" required>
+                        <input type="text" name="name" class="form-control" value="{{ initial.name }}" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Gender *</label>
                         <select name="gender" class="form-select" required>
                             <option value="">Select</option>
                             {% for gender in genders %}
-                                <option value="{{ gender }}">{{ gender }}</option>
+                                <option value="{{ gender }}" {% if initial.gender == gender %}selected{% endif %}>{{ gender }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Mobile</label>
-                        <input type="text" name="mobile" class="form-control">
+                        <input type="text" name="mobile" class="form-control" value="{{ initial.mobile }}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Date of Birth</label>
-                        <input type="date" name="dob" class="form-control">
+                        <input type="date" name="dob" class="form-control" value="{{ initial.dob }}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Blood Group</label>
                         <select name="blood_group" class="form-select">
                             <option value="">Select</option>
                             {% for value, label in blood_groups %}
-                                <option value="{{ value }}">{{ label }}</option>
+                                <option value="{{ value }}" {% if initial.blood_group == value %}selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Emergency Contact</label>
-                        <input type="text" name="emergency_contact" class="form-control">
+                        <input type="text" name="emergency_contact" class="form-control" value="{{ initial.emergency_contact }}">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Address *</label>
-                        <textarea name="address" rows="2" class="form-control" required></textarea>
+                        <textarea name="address" rows="2" class="form-control" required>{{ initial.address }}</textarea>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Appointment Date *</label>
-                        <input type="date" name="date1" class="form-control" required>
+                        <input type="date" id="appointmentDate" name="date1" class="form-control" value="{{ initial.date1 }}" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Appointment Time *</label>
-                        <input type="time" name="time1" class="form-control" required>
+                        <input type="time" id="appointmentTime" name="time1" class="form-control" value="{{ initial.time1 }}" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Allergies</label>
-                        <textarea name="allergies" rows="2" class="form-control"></textarea>
+                        <textarea name="allergies" rows="2" class="form-control">{{ initial.allergies }}</textarea>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Medical Notes</label>
-                        <textarea name="medical_notes" rows="2" class="form-control" placeholder="Brief symptoms or history"></textarea>
+                        <textarea name="medical_notes" rows="2" class="form-control" placeholder="Brief symptoms or history">{{ initial.medical_notes }}</textarea>
+                    </div>
+                    <div class="col-12">
+                        <div class="slot-panel">
+                            <p class="mb-2 fw-semibold">Available Slots For Selected Date</p>
+                            <div id="slotButtons" class="d-flex flex-wrap gap-2">
+                                {% if available_slots %}
+                                    {% for slot in available_slots %}
+                                        <button type="button" class="btn btn-soft btn-sm slot-pick" data-slot="{{ slot }}">{{ slot }}</button>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="text-muted small mb-0">Pick a date to view available slots.</p>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-brand mt-4 w-100">Confirm Appointment</button>
@@ -91,6 +105,48 @@
         </div>
     </div>
 </div>
+
+<script>
+    const dateInput = document.getElementById("appointmentDate");
+    const timeInput = document.getElementById("appointmentTime");
+    const slotButtons = document.getElementById("slotButtons");
+
+    function bindSlotButtons() {
+        document.querySelectorAll(".slot-pick").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                timeInput.value = btn.dataset.slot;
+            });
+        });
+    }
+
+    function loadSlots() {
+        const dateValue = dateInput.value;
+        if (!dateValue) {
+            slotButtons.innerHTML = '<p class="text-muted small mb-0">Pick a date to view available slots.</p>';
+            return;
+        }
+
+        fetch("{% url 'available_slots' doctor.id %}?date=" + dateValue)
+            .then((response) => response.json())
+            .then((data) => {
+                if (!data.slots || data.slots.length === 0) {
+                    slotButtons.innerHTML = '<p class="text-muted small mb-0">No slots available for this date.</p>';
+                    return;
+                }
+
+                slotButtons.innerHTML = data.slots
+                    .map((slot) => `<button type="button" class="btn btn-soft btn-sm slot-pick" data-slot="${slot}">${slot}</button>`)
+                    .join("");
+                bindSlotButtons();
+            })
+            .catch(() => {
+                slotButtons.innerHTML = '<p class="text-danger small mb-0">Could not load slots. Please try again.</p>';
+            });
+    }
+
+    bindSlotButtons();
+    dateInput.addEventListener("change", loadSlots);
+</script>
 
 {% endblock %}
 

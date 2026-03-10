@@ -22,12 +22,31 @@
     </div>
     <div class="col-md-6">
         <div class="stat-card h-100">
-            <p class="stat-label">Appointments Processed</p>
-            <p class="stat-value text-brand-accent">{{ appointment_count }}</p>
-            <p class="text-muted small mb-0">Secure booking workflow with conflict-safe scheduling.</p>
+            <p class="stat-label">My Upcoming Appointments</p>
+            <p class="stat-value text-brand-accent">{{ upcoming_count }}</p>
+            <p class="text-muted small mb-0">Keep track of upcoming consultations and reschedule when needed.</p>
         </div>
     </div>
 </div>
+
+<section class="panel mb-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+        <div>
+            <h3 class="h5 mb-1">Profile And Records</h3>
+            <p class="mb-0 small text-muted">
+                {% if profile_complete %}
+                    Your profile is complete. Booking forms will auto-fill your details.
+                {% else %}
+                    Complete your profile once to auto-fill booking details and speed up appointment requests.
+                {% endif %}
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'user_profile' %}" class="btn btn-soft btn-sm">Update Profile</a>
+            <a href="{% url 'user_documents' %}" class="btn btn-soft btn-sm">Upload Reports</a>
+        </div>
+    </div>
+</section>
 
 <section class="panel mb-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -54,7 +73,15 @@
                 <h4 class="doctor-name">Dr. {{ doctor.name }}</h4>
                 <p class="doctor-meta mb-1"><strong>Specialization:</strong> {{ doctor.special }}</p>
                 <p class="doctor-meta mb-1"><strong>Department:</strong> {{ doctor.department|default:'General' }}</p>
-                <p class="doctor-meta mb-3"><strong>Experience:</strong> {{ doctor.experience_years }} years</p>
+                <p class="doctor-meta mb-1"><strong>Experience:</strong> {{ doctor.experience_years }} years</p>
+                <p class="doctor-meta mb-3">
+                    <strong>Rating:</strong>
+                    {% if doctor.avg_rating %}
+                        {{ doctor.avg_rating|floatformat:1 }}/5 ({{ doctor.review_count }} reviews)
+                    {% else %}
+                        Not rated yet
+                    {% endif %}
+                </p>
                 <a href="{% url 'book_appointment_user' doctor.id %}" class="btn btn-brand btn-sm w-100">Book Appointment</a>
             </article>
         </div>

@@ -39,7 +39,15 @@
             <p class="doctor-meta mb-1"><strong>Specialization:</strong> {{ doctor.special }}</p>
             <p class="doctor-meta mb-1"><strong>Department:</strong> {{ doctor.department|default:'General' }}</p>
             <p class="doctor-meta mb-1"><strong>Qualification:</strong> {{ doctor.qualification|default:'N/A' }}</p>
-            <p class="doctor-meta mb-3"><strong>Availability:</strong> {{ doctor.availability_schedule|default:'Contact desk for schedule' }}</p>
+            <p class="doctor-meta mb-1"><strong>Availability:</strong> {{ doctor.availability_schedule|default:'Contact desk for schedule' }}</p>
+            <p class="doctor-meta mb-3">
+                <strong>Patient Rating:</strong>
+                {% if doctor.avg_rating %}
+                    {{ doctor.avg_rating|floatformat:1 }}/5 ({{ doctor.review_count }} reviews)
+                {% else %}
+                    Not rated yet
+                {% endif %}
+            </p>
             <a href="{% url 'book_appointment_user' doctor.id %}" class="btn btn-brand w-100">Book Appointment</a>
         </article>
     </div>

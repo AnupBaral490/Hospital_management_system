@@ -1,0 +1,52 @@
+{% extends 'user_base.html' %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Health Documents</h2>
+    <p class="mb-0">Upload reports, prescriptions, and notes for better follow-up continuity.</p>
+</section>
+
+<div class="row g-3">
+    <div class="col-lg-5">
+        <section class="form-card h-100">
+            <h3 class="h5 mb-3">Upload New Document</h3>
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <label class="form-label" for="id_title">Title</label>
+                {{ form.title }}
+
+                <label class="form-label mt-3" for="id_file">File</label>
+                {{ form.file }}
+
+                <label class="form-label mt-3" for="id_notes">Notes</label>
+                {{ form.notes }}
+
+                <button type="submit" class="btn btn-brand mt-3 w-100">Upload</button>
+            </form>
+        </section>
+    </div>
+
+    <div class="col-lg-7">
+        <section class="panel h-100">
+            <h3 class="h5 mb-3">Uploaded Files</h3>
+            <div class="doc-list">
+                {% for doc in documents %}
+                    <article class="doc-item">
+                        <div>
+                            <p class="fw-semibold mb-1">{{ doc.title }}</p>
+                            <p class="small text-muted mb-1">Uploaded on {{ doc.uploaded_at }}</p>
+                            {% if doc.notes %}
+                                <p class="small text-muted mb-0">{{ doc.notes }}</p>
+                            {% endif %}
+                        </div>
+                        <a href="{{ doc.file.url }}" target="_blank" class="btn btn-soft btn-sm">Open</a>
+                    </article>
+                {% empty %}
+                    <p class="text-muted mb-0">No documents uploaded yet.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %}

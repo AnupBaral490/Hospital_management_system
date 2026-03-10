@@ -1,0 +1,73 @@
+{% extends 'user_base.html' %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">My Appointments</h2>
+    <p class="mb-0">View upcoming and past appointments, reschedule visits, and submit feedback.</p>
+</section>
+
+<section class="panel mb-3">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Status Filter</label>
+            <select name="status" class="form-select">
+                <option value="">All</option>
+                {% for value, label in statuses %}
+                    <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-brand w-100">Apply</button>
+            <a href="{% url 'user_my_appointments' %}" class="btn btn-soft w-100">Reset</a>
+        </div>
+    </form>
+</section>
+
+<section class="panel table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Specialization</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Feedback</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>Dr. {{ appointment.doctor.name }}</td>
+                    <td>{{ appointment.doctor.special }}</td>
+                    <td>{{ appointment.date1 }}</td>
+                    <td>{{ appointment.time1 }}</td>
+                    <td><span class="status-pill status-{{ appointment.status|slugify }}">{{ appointment.get_status_display }}</span></td>
+                    <td>
+                        {% if appointment.feedback %}
+                            <span class="small text-muted">{{ appointment.feedback.rating }}/5</span>
+                        {% else %}
+                            <span class="small text-muted">Not yet</span>
+                        {% endif %}
+                    </td>
+                    <td class="actions-cell">
+                        {% if appointment.status == 'scheduled' %}
+                            <a href="{% url 'user_reschedule_appointment' appointment.id %}" class="btn btn-soft btn-sm">Reschedule</a>
+                        {% endif %}
+                        {% if appointment.status == 'completed' and not appointment.feedback %}
+                            <a href="{% url 'user_add_feedback' appointment.id %}" class="btn btn-brand btn-sm">Add Feedback</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No appointments found for selected filter.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

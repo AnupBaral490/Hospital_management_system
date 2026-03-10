@@ -1,0 +1,32 @@
+{% extends 'user_base.html' %}
+{% block body %}
+
+<section class="page-hero mb-4">
+    <h2 class="mb-2">Appointment Feedback</h2>
+    <p class="mb-0">Share your experience for Dr. {{ appointment.doctor.name }}. Your feedback helps other patients.</p>
+</section>
+
+<section class="form-shell" style="max-width: 760px;">
+    <div class="form-card">
+        <p class="mb-3"><strong>Appointment:</strong> {{ appointment.date1 }} at {{ appointment.time1 }} | <strong>Patient:</strong> {{ appointment.patient.name }}</p>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="id_rating">Rating</label>
+                {{ form.rating }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id_comment">Comment</label>
+                {{ form.comment }}
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-brand">Submit Feedback</button>
+                <a href="{% url 'user_my_appointments' %}" class="btn btn-soft">Back</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

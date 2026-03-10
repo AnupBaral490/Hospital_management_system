@@ -1,12 +1,23 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import JsonResponse
 from .models import *
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
 from django.shortcuts import get_object_or_404
-from .forms import DoctorForm, PatientForm, AppointmentForm, ContactMessageForm
+from .forms import (
+    DoctorForm,
+    PatientForm,
+    AppointmentForm,
+    ContactMessageForm,
+    UserProfileForm,
+    HealthDocumentForm,
+    AppointmentFeedbackForm,
+    RescheduleForm,
+)
+from datetime import datetime
 # Create your views here.
 
 
@@ -46,6 +57,44 @@ DISEASE_TAGS = [
     "Mental",
     "Headache",
 ]
+
+AVAILABLE_TIME_SLOTS = [
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+]
+
+
+def _parse_date(date_str):
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except (TypeError, ValueError):
+        return None
+
+
+def _get_available_slots(doctor, date_value, exclude_appointment_id=None):
+    booked_times = (
+        Appointment.objects.filter(doctor=doctor, date1=date_value)
+        .exclude(status=AppointmentStatus.CANCELLED)
+        .exclude(id=exclude_appointment_id)
+        .values_list("time1", flat=True)
+    )
+    booked_str = {t.strftime("%H:%M") for t in booked_times}
+    return [slot for slot in AVAILABLE_TIME_SLOTS if slot not in booked_str]
 
 
 def staff_required(view_func):
@@ -130,11 +179,28 @@ def User_Login(request):
 
 @user_required
 def User_Home(request):
+    top_doctors = Doctor.objects.annotate(
+        avg_rating=Avg("appointment__feedback__rating"),
+        review_count=Count("appointment__feedback"),
+    ).order_by("name")[:6]
+
+    profile, _ = UserProfile.objects.get_or_create(
+        user=request.user,
+        defaults={"full_name": request.user.get_full_name() or request.user.username},
+    )
+
+    upcoming_count = Appointment.objects.filter(
+        booked_by=request.user,
+        status=AppointmentStatus.SCHEDULED,
+    ).count()
+
     data = {
         "doctor_count": Doctor.objects.count(),
         "appointment_count": Appointment.objects.count(),
         "disease_tags": DISEASE_TAGS,
-        "top_doctors": Doctor.objects.order_by("name")[:6],
+        "top_doctors": top_doctors,
+        "upcoming_count": upcoming_count,
+        "profile_complete": bool(profile.phone and profile.address),
     }
     return render(request, "user_home.html", data)
 
@@ -143,7 +209,10 @@ def User_Find_Doctor(request):
     disease = request.GET.get("disease", "").strip()
     query = request.GET.get("q", "").strip()
 
-    doctors = Doctor.objects.all().order_by("name")
+    doctors = Doctor.objects.annotate(
+        avg_rating=Avg("appointment__feedback__rating"),
+        review_count=Count("appointment__feedback"),
+    ).order_by("name")
     matched_terms = []
 
     if disease:
@@ -177,21 +246,64 @@ def User_Find_Doctor(request):
 @user_required
 def User_Book_Appointment(request, doctor_id):
     doctor = get_object_or_404(Doctor, id=doctor_id)
+    profile, _ = UserProfile.objects.get_or_create(
+        user=request.user,
+        defaults={"full_name": request.user.get_full_name() or request.user.username},
+    )
     error = ""
     success = ""
+    available_slots = []
+    selected_date = request.GET.get("date1", "").strip()
+
+    initial = {
+        "name": profile.full_name or request.user.get_full_name() or request.user.username,
+        "gender": profile.gender,
+        "mobile": profile.phone,
+        "address": profile.address,
+        "dob": profile.dob.isoformat() if profile.dob else "",
+        "blood_group": profile.blood_group,
+        "emergency_contact": profile.emergency_contact,
+        "allergies": profile.allergies,
+        "medical_notes": "",
+        "date1": selected_date,
+        "time1": "",
+    }
+
+    if selected_date:
+        parsed_date = _parse_date(selected_date)
+        if parsed_date:
+            available_slots = _get_available_slots(doctor, parsed_date)
 
     if request.method == "POST":
-        name = request.POST.get("name", "").strip()
-        gender = request.POST.get("gender", "").strip()
-        mobile = request.POST.get("mobile", "").strip()
-        address = request.POST.get("address", "").strip()
-        dob = request.POST.get("dob", "").strip() or None
-        blood_group = request.POST.get("blood_group", "").strip()
-        emergency_contact = request.POST.get("emergency_contact", "").strip()
-        allergies = request.POST.get("allergies", "").strip()
-        medical_notes = request.POST.get("medical_notes", "").strip()
-        date1 = request.POST.get("date1", "").strip()
-        time1 = request.POST.get("time1", "").strip()
+        initial = {
+            "name": request.POST.get("name", "").strip(),
+            "gender": request.POST.get("gender", "").strip(),
+            "mobile": request.POST.get("mobile", "").strip(),
+            "address": request.POST.get("address", "").strip(),
+            "dob": request.POST.get("dob", "").strip(),
+            "blood_group": request.POST.get("blood_group", "").strip(),
+            "emergency_contact": request.POST.get("emergency_contact", "").strip(),
+            "allergies": request.POST.get("allergies", "").strip(),
+            "medical_notes": request.POST.get("medical_notes", "").strip(),
+            "date1": request.POST.get("date1", "").strip(),
+            "time1": request.POST.get("time1", "").strip(),
+        }
+
+        name = initial["name"]
+        gender = initial["gender"]
+        mobile = initial["mobile"]
+        address = initial["address"]
+        dob = initial["dob"] or None
+        blood_group = initial["blood_group"]
+        emergency_contact = initial["emergency_contact"]
+        allergies = initial["allergies"]
+        medical_notes = initial["medical_notes"]
+        date1 = initial["date1"]
+        time1 = initial["time1"]
+
+        parsed_date = _parse_date(date1)
+        if parsed_date:
+            available_slots = _get_available_slots(doctor, parsed_date)
 
         if not all([name, gender, address, date1, time1]):
             error = "Please fill all required fields."
@@ -219,11 +331,22 @@ def User_Book_Appointment(request, doctor_id):
                 Appointment.objects.create(
                     doctor=doctor,
                     patient=patient,
+                    booked_by=request.user,
                     date1=date1,
                     time1=time1,
                     status=AppointmentStatus.SCHEDULED,
                 )
+                profile.full_name = name
+                profile.gender = gender
+                profile.phone = mobile
+                profile.address = address
+                profile.dob = dob or None
+                profile.blood_group = blood_group
+                profile.emergency_contact = emergency_contact
+                profile.allergies = allergies
+                profile.save()
                 success = "Your appointment request has been submitted successfully."
+                initial["time1"] = ""
 
     data = {
         "doctor": doctor,
@@ -231,8 +354,178 @@ def User_Book_Appointment(request, doctor_id):
         "success": success,
         "blood_groups": BloodGroup.choices,
         "genders": ["Male", "Female", "Other"],
+        "initial": initial,
+        "available_slots": available_slots,
     }
     return render(request, "user_book_appointment.html", data)
+
+
+@user_required
+def User_Profile(request):
+    profile, _ = UserProfile.objects.get_or_create(
+        user=request.user,
+        defaults={"full_name": request.user.get_full_name() or request.user.username},
+    )
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("user_profile")
+    else:
+        form = UserProfileForm(instance=profile)
+
+    return render(request, "user_profile.html", {"form": form})
+
+
+@user_required
+def User_My_Appointments(request):
+    status = request.GET.get("status", "").strip()
+
+    appointments = Appointment.objects.select_related("doctor", "patient").filter(
+        booked_by=request.user
+    )
+    if status:
+        appointments = appointments.filter(status=status)
+    appointments = appointments.order_by("-date1", "-time1")
+
+    data = {
+        "appointments": appointments,
+        "statuses": AppointmentStatus.choices,
+        "selected_status": status,
+    }
+    return render(request, "user_my_appointments.html", data)
+
+
+@user_required
+def User_Reschedule_Appointment(request, appointment_id):
+    appointment = get_object_or_404(
+        Appointment.objects.select_related("doctor", "patient"),
+        id=appointment_id,
+        booked_by=request.user,
+    )
+
+    if appointment.status != AppointmentStatus.SCHEDULED:
+        messages.error(request, "Only scheduled appointments can be rescheduled.")
+        return redirect("user_my_appointments")
+
+    selected_date = request.GET.get("date1", appointment.date1.isoformat())
+    parsed_date = _parse_date(selected_date)
+    available_slots = _get_available_slots(
+        appointment.doctor,
+        parsed_date or appointment.date1,
+        exclude_appointment_id=appointment.id,
+    )
+
+    if request.method == "POST":
+        form = RescheduleForm(request.POST)
+        if form.is_valid():
+            new_date = form.cleaned_data["date1"]
+            new_time = form.cleaned_data["time1"]
+
+            clash = Appointment.objects.filter(
+                doctor=appointment.doctor,
+                date1=new_date,
+                time1=new_time,
+            ).exclude(id=appointment.id).exclude(status=AppointmentStatus.CANCELLED)
+
+            if clash.exists():
+                form.add_error("time1", "Selected slot is already booked. Please choose another time.")
+            else:
+                appointment.date1 = new_date
+                appointment.time1 = new_time
+                appointment.save()
+                messages.success(request, "Appointment rescheduled successfully.")
+                return redirect("user_my_appointments")
+    else:
+        form = RescheduleForm(
+            initial={
+                "date1": appointment.date1,
+                "time1": appointment.time1,
+            }
+        )
+
+    data = {
+        "appointment": appointment,
+        "form": form,
+        "available_slots": available_slots,
+    }
+    return render(request, "user_reschedule_appointment.html", data)
+
+
+@user_required
+def User_Available_Slots(request, doctor_id):
+    doctor = get_object_or_404(Doctor, id=doctor_id)
+    date_str = request.GET.get("date", "").strip()
+    exclude_appointment = request.GET.get("exclude_appointment", "").strip()
+    try:
+        exclude_appointment_id = int(exclude_appointment) if exclude_appointment else None
+    except ValueError:
+        exclude_appointment_id = None
+
+    date_obj = _parse_date(date_str)
+    if not date_obj:
+        return JsonResponse({"error": "Invalid date"}, status=400)
+
+    slots = _get_available_slots(doctor, date_obj, exclude_appointment_id=exclude_appointment_id)
+    return JsonResponse({"doctor": doctor.name, "date": date_str, "slots": slots})
+
+
+@user_required
+def User_Health_Documents(request):
+    if request.method == "POST":
+        form = HealthDocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.user = request.user
+            document.save()
+            messages.success(request, "Document uploaded successfully.")
+            return redirect("user_documents")
+    else:
+        form = HealthDocumentForm()
+
+    documents = HealthDocument.objects.filter(user=request.user)
+    return render(
+        request,
+        "user_documents.html",
+        {"form": form, "documents": documents},
+    )
+
+
+@user_required
+def User_Add_Feedback(request, appointment_id):
+    appointment = get_object_or_404(
+        Appointment.objects.select_related("doctor", "patient"),
+        id=appointment_id,
+        booked_by=request.user,
+    )
+
+    if appointment.status != AppointmentStatus.COMPLETED:
+        messages.error(request, "Feedback can be submitted only for completed appointments.")
+        return redirect("user_my_appointments")
+
+    if hasattr(appointment, "feedback"):
+        messages.info(request, "Feedback already submitted for this appointment.")
+        return redirect("user_my_appointments")
+
+    if request.method == "POST":
+        form = AppointmentFeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.appointment = appointment
+            feedback.user = request.user
+            feedback.save()
+            messages.success(request, "Thank you. Your feedback has been submitted.")
+            return redirect("user_my_appointments")
+    else:
+        form = AppointmentFeedbackForm()
+
+    return render(
+        request,
+        "user_feedback.html",
+        {"appointment": appointment, "form": form},
+    )
 
 
 @user_required

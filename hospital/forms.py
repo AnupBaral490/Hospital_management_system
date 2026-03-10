@@ -1,6 +1,14 @@
 from django import forms
 
-from .models import Appointment, ContactMessage, Doctor, Patient
+from .models import (
+    Appointment,
+    AppointmentFeedback,
+    ContactMessage,
+    Doctor,
+    HealthDocument,
+    Patient,
+    UserProfile,
+)
 
 
 class BootstrapFormMixin:
@@ -103,3 +111,65 @@ class ContactMessageForm(BootstrapFormMixin, forms.ModelForm):
         widgets = {
             "message": forms.Textarea(attrs={"rows": 4}),
         }
+
+
+class UserProfileForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._apply_bootstrap_classes()
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "full_name",
+            "gender",
+            "phone",
+            "address",
+            "dob",
+            "blood_group",
+            "emergency_contact",
+            "allergies",
+        ]
+        widgets = {
+            "dob": forms.DateInput(attrs={"type": "date"}),
+            "allergies": forms.Textarea(attrs={"rows": 3}),
+        }
+
+
+class HealthDocumentForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._apply_bootstrap_classes()
+
+    class Meta:
+        model = HealthDocument
+        fields = ["title", "file", "notes"]
+        widgets = {
+            "notes": forms.Textarea(attrs={"rows": 3, "placeholder": "Optional notes"}),
+        }
+
+
+class AppointmentFeedbackForm(BootstrapFormMixin, forms.ModelForm):
+    RATING_CHOICES = [(i, f"{i} / 5") for i in range(1, 6)]
+
+    rating = forms.ChoiceField(choices=RATING_CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._apply_bootstrap_classes()
+
+    class Meta:
+        model = AppointmentFeedback
+        fields = ["rating", "comment"]
+        widgets = {
+            "comment": forms.Textarea(attrs={"rows": 4, "placeholder": "Share your experience"}),
+        }
+
+
+class RescheduleForm(BootstrapFormMixin, forms.Form):
+    date1 = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+    time1 = forms.TimeField(widget=forms.TimeInput(attrs={"type": "time"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._apply_bootstrap_classes()

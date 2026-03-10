@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from hospital.views import*
 
 urlpatterns = [
@@ -26,8 +28,14 @@ urlpatterns = [
     path('user/login/', User_Login, name='user_login'),
     path('user/register/', User_Register, name='user_register'),
     path('user/dashboard/', User_Home, name='user_home'),
+    path('user/profile/', User_Profile, name='user_profile'),
+    path('user/my-appointments/', User_My_Appointments, name='user_my_appointments'),
+    path('user/documents/', User_Health_Documents, name='user_documents'),
     path('find-doctor/', User_Find_Doctor, name='find_doctor'),
     path('book-appointment/<int:doctor_id>/', User_Book_Appointment, name='book_appointment_user'),
+    path('doctor/<int:doctor_id>/available-slots/', User_Available_Slots, name='available_slots'),
+    path('appointment/<int:appointment_id>/reschedule/', User_Reschedule_Appointment, name='user_reschedule_appointment'),
+    path('appointment/<int:appointment_id>/feedback/', User_Add_Feedback, name='user_add_feedback'),
     path('my-appointment-status/', User_Appointment_Status, name='my_appointment_status'),
 
     path('about/', About,name='about'),
@@ -52,3 +60,6 @@ urlpatterns = [
     path('appointment/<int:pid>/delete/', Delete_Appointment,name='delete_appointment'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

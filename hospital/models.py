@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -50,6 +51,13 @@ class Patient(models.Model):
 class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    booked_by = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="booked_appointments",
+    )
     date1 = models.DateField()
     time1 = models.TimeField()
     status = models.CharField(
@@ -83,6 +91,54 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    full_name = models.CharField(max_length=80, blank=True)
+    gender = models.CharField(max_length=10, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=150, blank=True)
+    dob = models.DateField(null=True, blank=True)
+    blood_group = models.CharField(max_length=5, choices=BloodGroup.choices, blank=True)
+    emergency_contact = models.CharField(max_length=20, blank=True)
+    allergies = models.TextField(blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Profile: {self.user.username}"
+
+
+class HealthDocument(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="health_documents")
+    title = models.CharField(max_length=120)
+    file = models.FileField(upload_to="health_documents/%Y/%m")
+    notes = models.TextField(blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-uploaded_at"]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.title}"
+
+
+class AppointmentFeedback(models.Model):
+    appointment = models.OneToOneField(
+        Appointment,
+        on_delete=models.CASCADE,
+        related_name="feedback",
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointment_feedbacks")
+    rating = models.PositiveSmallIntegerField()
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Feedback {self.rating}/5 for appointment {self.appointment_id}"
 
 
 
