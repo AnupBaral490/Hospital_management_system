@@ -1,16 +1,16 @@
 :root {
-    --bg-a: #f4f8ff;
-    --bg-b: #e9f1fb;
-    --ink: #112b40;
-    --muted: #5d7388;
-    --primary: #0f766e;
-    --primary-strong: #0b5d58;
-    --accent: #0f8ccf;
-    --accent-soft: #e6f5fd;
+    --bg-a: #f7faf7;
+    --bg-b: #eaf2f0;
+    --ink: #153047;
+    --muted: #5b7182;
+    --primary: #117a65;
+    --primary-strong: #0d6251;
+    --accent: #2e7fb2;
+    --accent-soft: #eaf4fb;
     --card: #ffffff;
-    --card-soft: #fbfdff;
-    --ring: rgba(31, 138, 192, 0.2);
-    --border: #d6e3f1;
+    --card-soft: #f9fcfb;
+    --ring: rgba(46, 127, 178, 0.22);
+    --border: #cfdee7;
     --danger: #b94a48;
 }
 
@@ -18,38 +18,38 @@ body {
     font-family: "Poppins", "Segoe UI", sans-serif;
     color: var(--ink);
     background:
-        radial-gradient(circle at 10% 5%, rgba(31, 138, 192, 0.1), transparent 45%),
-        radial-gradient(circle at 90% 95%, rgba(13, 110, 110, 0.09), transparent 40%),
+        radial-gradient(circle at 10% 5%, rgba(46, 127, 178, 0.1), transparent 45%),
+        radial-gradient(circle at 90% 95%, rgba(17, 122, 101, 0.09), transparent 40%),
         linear-gradient(180deg, var(--bg-a), var(--bg-b));
     min-height: 100vh;
     margin: 0;
 }
 
 .top-nav {
-    background: linear-gradient(90deg, #0f2236, #163a56);
+    background: linear-gradient(90deg, #123047, #1a5468);
     box-shadow: 0 12px 24px rgba(16, 32, 50, 0.2);
 }
 
 .top-nav-admin {
-    background: linear-gradient(90deg, #102235, #214866);
+    background: linear-gradient(90deg, #17314a, #22617a);
 }
 
 .top-nav-user {
-    background: linear-gradient(90deg, #0f4d64, #1e768a);
+    background: linear-gradient(90deg, #156073, #278188);
 }
 
 body.admin-app {
     background:
-        radial-gradient(circle at 14% 6%, rgba(32, 92, 139, 0.15), transparent 45%),
-        radial-gradient(circle at 85% 90%, rgba(15, 118, 110, 0.1), transparent 40%),
-        linear-gradient(180deg, #f2f7ff, #e7eef9);
+    radial-gradient(circle at 14% 6%, rgba(46, 127, 178, 0.14), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(17, 122, 101, 0.1), transparent 40%),
+    linear-gradient(180deg, #f3f8f9, #e8f0f2);
 }
 
 body.user-app {
     background:
-        radial-gradient(circle at 8% 3%, rgba(15, 140, 207, 0.14), transparent 45%),
-        radial-gradient(circle at 90% 94%, rgba(39, 158, 125, 0.11), transparent 40%),
-        linear-gradient(180deg, #f3fbff, #e7f5fb);
+    radial-gradient(circle at 8% 3%, rgba(46, 127, 178, 0.12), transparent 45%),
+    radial-gradient(circle at 90% 94%, rgba(17, 122, 101, 0.1), transparent 40%),
+    linear-gradient(180deg, #f4fbfb, #e8f3f4);
 }
 
 .navbar-brand {
@@ -93,8 +93,8 @@ body.user-app {
     position: relative;
     overflow: hidden;
     border-radius: 22px;
-    border: 1px solid #cfe1f2;
-    background: linear-gradient(120deg, #13324a, #1a4f73);
+    border: 1px solid #c8dbe7;
+    background: linear-gradient(120deg, #17425d, #1f6d7c);
     color: #f2fbff;
     padding: 1.8rem;
     box-shadow: 0 20px 36px rgba(12, 34, 52, 0.2);
@@ -156,7 +156,7 @@ body.user-app {
 .form-control,
 .form-select {
     border-radius: 10px;
-    border: 1px solid #cbdcea;
+    border: 1px solid #c6d8e2;
     background: #fdfefe;
 }
 
@@ -176,21 +176,21 @@ body.user-app {
 }
 
 .btn-brand:hover {
-    background: linear-gradient(90deg, var(--primary-strong), #156e99);
+    background: linear-gradient(90deg, var(--primary-strong), #236f98);
     color: #fff;
 }
 
 .btn-soft {
     border-radius: 10px;
     border: 1px solid var(--border);
-    background: #f7fbff;
-    color: #284963;
+    background: #f4f9fb;
+    color: #1e4c67;
     font-weight: 500;
 }
 
 .btn-soft:hover {
-    background: #e8f3ff;
-    color: #132e46;
+    background: #e4f0f7;
+    color: #133f58;
 }
 
 .table {
@@ -199,11 +199,11 @@ body.user-app {
 }
 
 .table thead th {
-    background: #f0f7ff;
-    color: #24435e;
+    background: #eef6f9;
+    color: #214b63;
     font-weight: 600;
     font-size: 0.9rem;
-    border-bottom: 1px solid #d2e2f0;
+    border-bottom: 1px solid #cddce6;
 }
 
 .table tbody tr {
@@ -234,13 +234,13 @@ body.user-app {
 }
 
 .status-scheduled {
-    background: #e6f5ff;
-    color: #0f5f8a;
+    background: #e7f3fb;
+    color: #1f658d;
 }
 
 .status-completed {
-    background: #e7f8ee;
-    color: #0f6b3f;
+    background: #e7f8f2;
+    color: #0f6a52;
 }
 
 .status-cancelled {
@@ -254,7 +254,7 @@ body.user-app {
 }
 
 .stat-card {
-    background: linear-gradient(160deg, #ffffff, #f2f9ff);
+    background: linear-gradient(160deg, #ffffff, #f0f8fa);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 1rem;
@@ -279,6 +279,18 @@ body.user-app {
     font-weight: 700;
 }
 
+.text-brand-primary {
+    color: var(--primary) !important;
+}
+
+.text-brand-accent {
+    color: var(--accent) !important;
+}
+
+.text-brand-muted-strong {
+    color: #2b607f !important;
+}
+
 .quick-actions-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -292,7 +304,7 @@ body.user-app {
     text-decoration: none;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: linear-gradient(160deg, #ffffff, #f5fbff);
+    background: linear-gradient(160deg, #ffffff, #f2f9fb);
     padding: 0.9rem;
     color: var(--ink);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -309,7 +321,7 @@ body.user-app {
     height: 38px;
     border-radius: 11px;
     background: var(--accent-soft);
-    color: #0f6b99;
+    color: #2a6f99;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -338,7 +350,7 @@ body.user-app {
     padding: 0.75rem;
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: #fafdff;
+    background: #f7fcfd;
 }
 
 .ops-dot {
@@ -347,32 +359,32 @@ body.user-app {
     border-radius: 999px;
     margin-top: 7px;
     background: linear-gradient(180deg, var(--primary), var(--accent));
-    box-shadow: 0 0 0 5px rgba(15, 140, 207, 0.1);
+    box-shadow: 0 0 0 5px rgba(46, 127, 178, 0.12);
 }
 
 .disease-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    border: 1px solid #cfe2f2;
+    border: 1px solid #c8dbe7;
     border-radius: 999px;
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
     text-decoration: none;
-    color: #225173;
-    background: #f4fbff;
+    color: #255a79;
+    background: #f1f8fb;
     transition: all 0.2s ease;
 }
 
 .disease-tag:hover {
-    background: #def1fb;
-    color: #123f5f;
+    background: #e2f0f7;
+    color: #154766;
 }
 
 .doctor-card {
     border: 1px solid var(--border);
     border-radius: 16px;
-    background: linear-gradient(160deg, #ffffff, #f8fcff);
+    background: linear-gradient(160deg, #ffffff, #f3f9fb);
     box-shadow: 0 12px 22px rgba(15, 45, 70, 0.08);
     padding: 1rem;
 }
@@ -381,8 +393,8 @@ body.user-app {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: #e8f4fc;
-    color: #0f6d9d;
+    background: #e5f2f9;
+    color: #2a6e96;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -413,7 +425,7 @@ body.user-app {
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 0.75rem;
-    background: #f9fdff;
+    background: #f6fbfc;
 }
 
 .flow-index {
@@ -423,7 +435,7 @@ body.user-app {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #1786c2, #0f6a99);
+    background: linear-gradient(180deg, #2e7fb2, #1f648f);
     color: #fff;
     font-weight: 600;
     font-size: 0.85rem;
@@ -452,7 +464,7 @@ body.user-app {
     gap: 0.65rem;
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: #f8fcff;
+    background: #f4fafb;
     padding: 0.7rem;
 }
 
@@ -463,8 +475,8 @@ body.user-app {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #0f6895;
-    background: #e6f4fc;
+    color: #2a6e96;
+    background: #e5f2f9;
     flex-shrink: 0;
 }
 
@@ -477,30 +489,30 @@ body.user-app {
 
 .faq-item .accordion-button {
     font-weight: 600;
-    color: #1e3e58;
-    background: #f7fbff;
+    color: #1f4962;
+    background: #f3f9fb;
 }
 
 .faq-item .accordion-button:not(.collapsed) {
-    color: #11324d;
-    background: #e8f4fc;
+    color: #1a425b;
+    background: #e4f1f8;
     box-shadow: none;
 }
 
 .faq-item .accordion-body {
     background: #ffffff;
-    color: #4d6479;
+    color: #506a7c;
 }
 
 .emergency-strip {
     border-left: 4px solid #d9534f;
-    background: linear-gradient(135deg, #fffafa, #f8fdff);
+    background: linear-gradient(135deg, #fffafb, #f2f8fb);
 }
 
 .testimonial-card {
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: linear-gradient(155deg, #ffffff, #f4fbff);
+    background: linear-gradient(155deg, #ffffff, #f0f8fb);
     padding: 1.2rem;
     min-height: 150px;
     box-shadow: 0 10px 22px rgba(14, 40, 62, 0.08);
@@ -508,13 +520,13 @@ body.user-app {
 
 .testimonial-text {
     font-size: 0.96rem;
-    color: #36556c;
+    color: #3d6178;
     margin-bottom: 0.85rem;
 }
 
 .testimonial-author {
     font-weight: 600;
-    color: #173b57;
+    color: #1f4d68;
 }
 
 #testimonialCarousel .carousel-control-prev,
@@ -524,7 +536,7 @@ body.user-app {
     top: auto;
     bottom: -46px;
     border-radius: 999px;
-    background: #2a5f83;
+    background: #2d6f99;
     opacity: 0.92;
 }
 
@@ -557,7 +569,7 @@ body.user-app {
     align-items: center;
     justify-content: center;
     background: var(--accent-soft);
-    color: #0f6994;
+    color: #2a6e96;
     margin-bottom: 0.6rem;
 }
 
@@ -581,7 +593,7 @@ body.user-app {
 }
 
 .contact-card a {
-    color: #195781;
+    color: #25658d;
     text-decoration: none;
 }
 
@@ -594,6 +606,61 @@ body.user-app {
     text-align: center;
     font-size: 0.88rem;
     margin-top: 1.1rem;
+}
+
+.site-footer {
+    margin-top: 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(140deg, #f8fcfc, #edf6f8);
+    box-shadow: 0 10px 20px rgba(16, 42, 62, 0.08);
+    padding: 1rem;
+}
+
+.site-footer h6 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    color: #1f4f67;
+}
+
+.site-footer p,
+.site-footer a {
+    color: #4d677a;
+    font-size: 0.86rem;
+    margin: 0;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: #2a6e96;
+    text-decoration: underline;
+}
+
+.auth-help-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: 0.9rem;
+}
+
+.auth-help-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.7rem;
+    background: #f7fcfc;
+}
+
+.auth-help-item h6 {
+    margin-bottom: 0.25rem;
+    font-size: 0.88rem;
+    color: #20536f;
+}
+
+.auth-help-item p {
+    margin-bottom: 0;
+    font-size: 0.82rem;
+    color: #5a6f80;
 }
 
 @keyframes fadeInUp {

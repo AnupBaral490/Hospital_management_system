@@ -49,6 +49,27 @@
                 {% endfor %}
             {% endif %}
             {% block body %}{% endblock %}
+
+            <section class="site-footer">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <h6>Patient Services</h6>
+                        <p>Helping you find specialists, book appointments, and track visits with confidence.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Quick Links</h6>
+                        <p><a href="{% url 'find_doctor' %}">Find Doctor</a></p>
+                        <p><a href="{% url 'my_appointment_status' %}">Track Appointment</a></p>
+                        <p><a href="{% url 'contact' %}">Contact Support</a></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Support Hours</h6>
+                        <p>Monday to Saturday</p>
+                        <p>09:00 AM to 07:00 PM</p>
+                        <p><a href="tel:102">Emergency: 102</a></p>
+                    </div>
+                </div>
+            </section>
             <p class="footer-note">Patient Help Desk</p>
         </div>
     </main>

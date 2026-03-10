@@ -58,6 +58,25 @@
                 {% endfor %}
             {% endif %}
             {% block body %}{% endblock %}
+
+            <section class="site-footer">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <h6>Admin Console</h6>
+                        <p>Centralized operations for doctor, patient, and appointment lifecycle management.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Operations Shortcuts</h6>
+                        <p><a href="{% url 'add_doctor' %}">Add Doctor</a></p>
+                        <p><a href="{% url 'add_patient' %}">Add Patient</a></p>
+                        <p><a href="{% url 'add_appointment' %}">Add Appointment</a></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Governance Note</h6>
+                        <p>Maintain accurate records and update appointment statuses throughout the day.</p>
+                    </div>
+                </div>
+            </section>
             <p class="footer-note">Admin Portal</p>
         </div>
     </main>
