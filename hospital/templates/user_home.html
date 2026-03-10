@@ -223,5 +223,102 @@
     </div>
 </section>
 
+<section class="panel mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="h5 mb-0">Care Programs And Services</h3>
+        <span class="small text-muted">Support available across common treatment journeys</span>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <span class="disease-tag"><i class="fa-solid fa-heart-pulse"></i>Cardiac Care</span>
+        <span class="disease-tag"><i class="fa-solid fa-lungs"></i>Respiratory Care</span>
+        <span class="disease-tag"><i class="fa-solid fa-brain"></i>Neuro Consultation</span>
+        <span class="disease-tag"><i class="fa-solid fa-person-pregnant"></i>Women Wellness</span>
+        <span class="disease-tag"><i class="fa-solid fa-child"></i>Child Health</span>
+        <span class="disease-tag"><i class="fa-solid fa-bone"></i>Bone And Joint</span>
+        <span class="disease-tag"><i class="fa-solid fa-eye"></i>Vision Care</span>
+        <span class="disease-tag"><i class="fa-solid fa-user-doctor"></i>General OPD</span>
+    </div>
+</section>
+
+<div class="row g-3 mt-1">
+    <div class="col-lg-8">
+        <section class="panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h5 mb-0">Patient Care Standards</h3>
+                <a href="{% url 'my_appointment_status' %}" class="btn btn-soft btn-sm">Check Status</a>
+            </div>
+
+            <div class="ops-list">
+                <div class="ops-item">
+                    <span class="ops-dot"></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Guided Doctor Discovery</p>
+                        <p class="mb-0 text-muted small">Choose specialists with clear profile details and department information.</p>
+                    </div>
+                </div>
+                <div class="ops-item">
+                    <span class="ops-dot"></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Safer Appointment Booking</p>
+                        <p class="mb-0 text-muted small">Built-in conflict checks help prevent overlapping appointments.</p>
+                    </div>
+                </div>
+                <div class="ops-item">
+                    <span class="ops-dot"></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Clear Follow-Up Tracking</p>
+                        <p class="mb-0 text-muted small">Monitor appointment progress with quick status lookup tools.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-4">
+        <section class="panel h-100">
+            <h3 class="h5 mb-3">Patient Experience Focus</h3>
+            <div class="mini-feature-list">
+                <div class="mini-feature-item">
+                    <span class="mini-feature-icon"><i class="fa-solid fa-shield-heart"></i></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Trusted Care Access</p>
+                        <p class="mb-0 small text-muted">Book consultations with verified specialists in one dashboard.</p>
+                    </div>
+                </div>
+                <div class="mini-feature-item">
+                    <span class="mini-feature-icon"><i class="fa-solid fa-clock"></i></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Time-Saving Journey</p>
+                        <p class="mb-0 small text-muted">Reduce desk visits with online search, booking, and tracking.</p>
+                    </div>
+                </div>
+                <div class="mini-feature-item">
+                    <span class="mini-feature-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                    <div>
+                        <p class="mb-1 fw-semibold">Mobile Friendly</p>
+                        <p class="mb-0 small text-muted">Access core services smoothly from phone, tablet, or desktop.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="panel mt-3">
+    <div class="row g-3 align-items-center">
+        <div class="col-lg-9">
+            <h3 class="h5 mb-2">Our Promise To You</h3>
+            <p class="mb-0 text-muted">
+                We continuously improve this patient portal to keep your healthcare journey clear, dependable,
+                and convenient. From finding the right doctor to tracking follow-up appointments, every step is
+                designed for confidence and ease.
+            </p>
+        </div>
+        <div class="col-lg-3 text-lg-end">
+            <a href="{% url 'find_doctor' %}" class="btn btn-brand"><i class="fa-solid fa-stethoscope me-1"></i>Book Consultation</a>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
 
